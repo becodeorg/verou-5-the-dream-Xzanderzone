@@ -11,15 +11,21 @@
   <form action="./" method="post">
     <label for="value">Value: </label>
     <input type="text" name="value">
-    <!-- <label for="currency">Currency: </label>
-    <input type="text" name="currency" >   -->
     <br>
-    <input type="radio" id="SEK" name="currency" value="SEK">
-    <label for="SEK">SEK</label><br>
-    <input type="radio" id="USD" name="currency" value="USD">
-    <label for="USD">USD</label><br>
-    <input type="radio" id="JPY" name="currency" value="JPY">
-    <label for="JPY">JPY</label>
+    <select name="from" id="from">
+      <option value="EUR">euro</option>
+      <option value="SEK">swedish krona</option>
+      <option value="RON">RON</option>
+      <option value="USD">USD</option>
+      <option value="JPY">japanese yen</option>
+    </select>
+    <select name="to" id="to">
+      <option value="EUR">euro</option>
+      <option value="SEK">swedish krona</option>
+      <option value="RON">RON</option>
+      <option value="USD">USD</option>
+      <option value="JPY">japanese yen</option>
+    </select>
     <br>
     <button type="submit">submit</button>
   </form>
@@ -27,16 +33,24 @@
 </html>
 
 <?php
-// var_dump($_POST);
-if($_POST["currency"]){
-   $cur=$_POST["currency"];
+  // var_dump($_POST);
+   $cur=$_POST["to"];
+   $from=$_POST["from"];
    $value=(int)$_POST["value"];
-  $calc = match($cur) { 
-      'SEK' => $value/11, 
+  $value = match($cur) { 
+      'SEK' => $value*11.18, 
+      'EUR' => $value, 
       'USD' => $value/0.91, 
       'JPY' => $value/0.0064, 
+      'RON' =>$value*4.5,
   }; 
-$calc=round($calc,2);
-echo ($_POST["value"]."  euros is equal to $calc  $cur ");
-}
+  $value = match($from) { 
+      'SEK' => $value/11.18, 
+      'EUR' => $value, 
+      'USD' => $value*0.91, 
+      'JPY' => $value*0.0064, 
+      'RON' =>$value/4.5,
+  }; 
+$value=round($value,2);
+echo ($_POST["value"].$from ." is equal to $value  $cur ");
 ?>
